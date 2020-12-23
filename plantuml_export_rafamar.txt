@@ -1,0 +1,76 @@
+@startuml
+
+title Mastermind - Vistas Públicas
+
+
+class Mastermind {
+  -Board board
+  -void play()
+  -boolean isResumed()
+  +{static} main()
+}
+
+class Board {
+  -List<Attempt> attempts
+  -Secret secret
+  +{static} MAX_ATTEMPTS
+  +void play()
+  -boolean isNotGameOver()
+  -void printPreviousAttempts()
+}
+
+class Attempt {
+  -ProposedCombination proposedCombination
+  -Secret secret
+  -int blackPegs
+  -int whitePegs
+  +void print()
+  +int getBlackPegs()
+  -void checkBlackAndWhitePegs()
+}
+
+enum Color {
+  RED
+  BLUE
+  YELLOW
+  ORANGE
+  PINK
+  GREEN
+  -char keyword
+  +{static}Color valueOf()
+  +{static}Color getRandomColor()
+  +char getKeyword()
+}
+
+class Combination {
+  -List<Color> colors
+  +{static} COMBINATION_SIZE
+  +int size()
+}
+
+class ProposedCombination {
+  -String userInput
+  -{static} Pattern COLORS_PATTERN
+  -boolean checkCorrectInput()
+  -boolean isCorrectLength()
+  -boolean isCharColors()
+}
+
+class Secret {
+  -Combination getRandom()
+}
+
+class IO << (S,#FF7700) Singleton >> {
+}
+
+
+Mastermind *--> Board
+Board *--> Attempt : (0,10)
+Board *--> Secret
+Board --> IO
+Color <--* Combination
+Combination <|-down- ProposedCombination
+Combination <|-down- Secret
+Attempt *--> Secret
+Attempt *--> ProposedCombination
+@enduml
